@@ -44,5 +44,6 @@ For Cloudflare R2, use:
 - `AUTO_UPDATE_S3_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com`
 - `AUTO_UPDATE_S3_FORCE_PATH_STYLE=true`
 - `AUTO_UPDATE_S3_OMIT_ACL=true`
+- `AUTO_UPDATE_KEEP_RELEASES=2` (CI cleanup keeps only the latest N versioned artifacts)
 
 plus your R2 access key and secret key.

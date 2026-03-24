@@ -84,6 +84,7 @@ For Cloudflare R2 publishing through Forge, also set:
 - `AUTO_UPDATE_S3_ACCESS_KEY_ID`
 - `AUTO_UPDATE_S3_SECRET_ACCESS_KEY`
 - optional: `AUTO_UPDATE_S3_FOLDER`, `AUTO_UPDATE_S3_FORCE_PATH_STYLE=true`, `AUTO_UPDATE_S3_OMIT_ACL=true`
+- optional: `AUTO_UPDATE_KEEP_RELEASES=2` (CI keeps only the latest N versioned artifacts)
 
 See `apps/desktop/.env.example` for the full template.
 
