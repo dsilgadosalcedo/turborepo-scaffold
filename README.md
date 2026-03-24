@@ -1,159 +1,66 @@
-# Turborepo starter
+# Next Electron Turborepo
 
-This Turborepo starter is maintained by the Turborepo core team.
+Reusable Turborepo boilerplate for teams that want one Next.js application to power both the web experience and the Electron desktop app.
 
-## Using this example
+## What This Starter Includes
 
-Run the following command:
+- `apps/web`: the main Next.js application
+- `apps/desktop`: the Electron shell that loads the web app in development and runs the standalone Next.js server in production
+- `apps/docs`: a separate Next.js docs app
+- `packages/ui`: shared shadcn-style UI primitives used across apps
+- `packages/typescript-config`: shared TypeScript configuration
 
-```sh
-npx create-turbo@latest
-```
+## Architecture
 
-## What's inside?
+### Development
 
-This Turborepo includes the following packages/apps:
+Run `bun dev`.
 
-### Apps and Packages
+Turbo starts the web app on `http://127.0.0.1:3000`, and Electron opens that URL directly. You work on the Next.js app once, and the browser and desktop window both reflect the same hot-reloaded UI.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Production
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+Run `bun build`.
 
-### Utilities
+The web app is built with `output: "standalone"`, then the desktop build bundles that standalone Next.js server into Electron. In production, Electron starts the packaged Next.js server on an internal localhost port and loads it in the app window. That keeps API routes, server actions, and other server-side features available inside the desktop app.
 
-This Turborepo has some additional tools already setup for you:
+## Tooling
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- `bun` for workspace management
+- `turbo` for monorepo orchestration
+- `oxlint` for linting across the repo
+- `oxfmt` for formatting across the repo
+- `electron-vite` for the Electron build pipeline
+- `electron-forge` for packaging and distribution
 
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+## Commands
 
 ```sh
-cd my-turborepo
-turbo build
+bun install
+bun dev
+bun build
+bun run lint
+bun run format
+bun run check-types
 ```
 
-Without global `turbo`, use your package manager:
+Useful app-specific commands:
 
 ```sh
-cd my-turborepo
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+bun run web
+bun run docs
+bun run desktop
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+## Updates
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+The desktop app is wired for background auto-updates on supported platforms:
 
-```sh
-turbo build --filter=docs
-```
+- Windows uses Squirrel through Electron Forge
+- macOS uses Forge ZIP metadata plus Electron's built-in updater
 
-Without global `turbo`:
+When an update finishes downloading while the app is open, the shared UI can surface an `Actualizar` button so the user can restart and apply it immediately.
 
-```sh
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+## Current Caveat
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+Electron Forge is the right default for a new Electron app, and this repo is already refactored in that direction. The remaining rough edge is Bun compatibility during Forge packaging in this workspace layout. Development, typechecking, and the shared app architecture are in place, but you should still verify your packaging flow in CI before treating this as a fully polished distribution template.

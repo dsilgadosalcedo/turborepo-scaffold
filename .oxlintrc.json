@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    "**/.next/**",
+    "**/.turbo/**",
+    "**/.bundle/**",
+    "**/.electron/**",
+    "**/dist/**",
+    "**/dist-electron/**",
+    "**/node_modules/**",
+    "**/out/**"
+  ]
+}

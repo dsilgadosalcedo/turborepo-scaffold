@@ -1,102 +1,126 @@
-import Image, { type ImageProps } from "next/image";
+import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
+import { DesktopUpdateButton } from "@repo/ui/desktop-update-button";
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
-
-  return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+const pillars = [
+  {
+    description:
+      "The browser and desktop app both run the same Next.js application. Electron is only the shell.",
+    title: "One UI Surface",
+  },
+  {
+    description:
+      "In development, Electron opens localhost:3000 so hot reload feels exactly like normal next dev.",
+    title: "Fast Development",
+  },
+  {
+    description:
+      "In production, Electron loads the bundled standalone server internally, so API routes and server actions still work offline.",
+    title: "Full Next Runtime",
+  },
+];
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen bg-background text-foreground">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(196,151,92,0.2),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(37,99,235,0.12),_transparent_30%)]" />
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-8 px-6 py-8 md:px-10 lg:px-12">
+        <header className="rounded-[2rem] border bg-card/90 p-6 shadow-[0_24px_80px_-36px_rgba(31,41,55,0.55)] backdrop-blur md:p-8">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-3xl space-y-4">
+                <div className="flex flex-wrap gap-3">
+                  <Badge variant="secondary">Next.js</Badge>
+                  <Badge variant="secondary">Electron</Badge>
+                  <Badge variant="secondary">Turborepo</Badge>
+                  <Badge variant="secondary">Standalone</Badge>
+                  <Badge variant="secondary">Auto Updates</Badge>
+                </div>
+                <h1 className="text-4xl font-semibold tracking-tight text-balance md:text-5xl">
+                  One Next.js app, shared across web and desktop
+                </h1>
+                <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+                  This starter keeps the browser app and the desktop app on the same Next.js code
+                  path. Electron stays focused on native responsibilities, while the product UI
+                  lives in one place.
+                </p>
+              </div>
+              <div className="flex items-center gap-3 self-start">
+                <DesktopUpdateButton />
+                <Button variant="secondary">Nueva radicacion</Button>
+              </div>
+            </div>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.dev/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.dev?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.dev →
-        </a>
-      </footer>
-    </div>
+            <Card className="border-border/70 bg-secondary/40">
+              <CardHeader>
+                <CardTitle>Update behavior</CardTitle>
+                <CardDescription>
+                  Updates download automatically in the background on desktop. When a release is
+                  ready and the app is still open, this header shows an <strong>Actualizar</strong>{" "}
+                  button so the user can restart and apply it immediately.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </header>
+
+        <section className="grid gap-4 lg:grid-cols-3">
+          {pillars.map((pillar) => (
+            <Card key={pillar.title} className="border-border/70 bg-card/85">
+              <CardHeader>
+                <CardTitle>{pillar.title}</CardTitle>
+                <CardDescription>{pillar.description}</CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </section>
+
+        <section className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+          <Card className="border-border/70 bg-card/85">
+            <CardHeader>
+              <CardTitle>Desktop runtime model</CardTitle>
+              <CardDescription>
+                The Electron process handles native concerns only: windowing, updates, and running
+                the bundled standalone Next server in production.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div className="rounded-2xl border bg-muted/35 px-4 py-3">
+                Development: `bun dev` starts Next on port 3000 and Electron opens that URL.
+              </div>
+              <div className="rounded-2xl border bg-muted/35 px-4 py-3">
+                Production: `bun build` creates the standalone Next output and packages it inside
+                Electron.
+              </div>
+              <div className="rounded-2xl border bg-muted/35 px-4 py-3">
+                Updates: Electron auto-updates check on startup, download in the background, and can
+                install on quit or via the header button.
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/70 bg-primary text-primary-foreground">
+            <CardHeader>
+              <CardTitle>Why this is the right split</CardTitle>
+              <CardDescription className="text-primary-foreground/75">
+                Your UI stays shared and your desktop-specific logic stays isolated.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="rounded-2xl bg-black/10 px-4 py-3">
+                `packages/ui` owns reusable shadcn-style primitives.
+              </div>
+              <div className="rounded-2xl bg-black/10 px-4 py-3">
+                `apps/web` owns routes, layouts, API routes, and server actions.
+              </div>
+              <div className="rounded-2xl bg-black/10 px-4 py-3">
+                `apps/desktop` owns Electron main, preload, packaging, and updates.
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      </div>
+    </main>
   );
 }
