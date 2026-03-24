@@ -61,6 +61,36 @@ The desktop app is wired for background auto-updates on supported platforms:
 
 When an update finishes downloading while the app is open, the shared UI can surface an `Actualizar` button so the user can restart and apply it immediately.
 
+### Update Configuration
+
+`apps/desktop` now auto-loads env variables from:
+
+- `.env` (repo root)
+- `.env.local` (repo root)
+- `apps/desktop/.env`
+- `apps/desktop/.env.local`
+
+Shell/CI variables still win over file values.
+
+Minimum variable:
+
+- `AUTO_UPDATE_BASE_URL` (example: `https://downloads.example.com/myapp`)
+
+For Cloudflare R2 publishing through Forge, also set:
+
+- `AUTO_UPDATE_S3_BUCKET`
+- `AUTO_UPDATE_S3_REGION=auto`
+- `AUTO_UPDATE_S3_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com`
+- `AUTO_UPDATE_S3_ACCESS_KEY_ID`
+- `AUTO_UPDATE_S3_SECRET_ACCESS_KEY`
+- optional: `AUTO_UPDATE_S3_FOLDER`, `AUTO_UPDATE_S3_FORCE_PATH_STYLE=true`, `AUTO_UPDATE_S3_OMIT_ACL=true`
+
+See `apps/desktop/.env.example` for the full template.
+
+### CI Release
+
+Use the GitHub Actions workflow at `.github/workflows/desktop-release.yml` to build/publish macOS + Windows artifacts without a local Windows machine. Add the matching repository secrets first.
+
 ## Current Caveat
 
 Electron Forge is the right default for a new Electron app, and this repo is already refactored in that direction. The remaining rough edge is Bun compatibility during Forge packaging in this workspace layout. Development, typechecking, and the shared app architecture are in place, but you should still verify your packaging flow in CI before treating this as a fully polished distribution template.

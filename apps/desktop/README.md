@@ -13,6 +13,12 @@ Electron shell for the `web` app.
 
 `bun build` builds the Next.js standalone output and packages it into Electron.
 
+Distributables are created under:
+
+- `apps/desktop/out/make/...` (share these)
+
+`apps/desktop/dist/...` is build output from `electron-vite`, not the final distributable folder.
+
 ## Updates
 
 Packaging is handled with Electron Forge. Auto-updates use Electron's built-in `autoUpdater`
@@ -24,3 +30,19 @@ installation. If you want Forge to publish to S3 as well, set:
 - `AUTO_UPDATE_S3_BUCKET`
 - `AUTO_UPDATE_S3_REGION`
 - `AUTO_UPDATE_S3_FOLDER` (optional)
+
+This app auto-loads env values from:
+
+- `.env` / `.env.local` at repo root
+- `apps/desktop/.env` / `apps/desktop/.env.local`
+
+Use `apps/desktop/.env.example` as the template.
+
+For Cloudflare R2, use:
+
+- `AUTO_UPDATE_S3_REGION=auto`
+- `AUTO_UPDATE_S3_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com`
+- `AUTO_UPDATE_S3_FORCE_PATH_STYLE=true`
+- `AUTO_UPDATE_S3_OMIT_ACL=true`
+
+plus your R2 access key and secret key.
