@@ -105,3 +105,4 @@ If you deploy `apps/web` and `apps/marketing` as separate Vercel projects, `apps
 - Set `AUTO_UPDATE_BASE_URL` anywhere the marketing download page or desktop packaging runs.
 - The default `/download` rewrite now forwards from the product app to the marketing app.
 - These public routing and download variables are validated at build time and should fail fast when missing.
+- The publish-only `AUTO_UPDATE_S3_*` variables are enforced only for desktop publish and release cleanup boundaries.

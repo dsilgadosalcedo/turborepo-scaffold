@@ -611,6 +611,22 @@ async function main() {
   const folder = process.env.AUTO_UPDATE_S3_FOLDER ?? "";
   const keepReleases = Number.parseInt(keepReleasesRaw, 10);
 
+  const missing = [
+    ["AUTO_UPDATE_KEEP_RELEASES", keepReleasesRaw],
+    ["AUTO_UPDATE_S3_BUCKET", bucket],
+    ["AUTO_UPDATE_S3_ENDPOINT", endpoint],
+    ["AUTO_UPDATE_S3_ACCESS_KEY_ID", accessKeyId],
+    ["AUTO_UPDATE_S3_SECRET_ACCESS_KEY", secretAccessKey],
+  ].flatMap(([name, value]) => (value ? [] : [name]));
+
+  if (missing.length > 0) {
+    throw new Error(`Missing required cleanup environment variables: ${missing.join(", ")}.`);
+  }
+
+  if (!Number.isInteger(keepReleases) || keepReleases < 1) {
+    throw new Error("AUTO_UPDATE_KEEP_RELEASES must be an integer >= 1.");
+  }
+
   await runCleanup({
     accessKeyId,
     bucket,

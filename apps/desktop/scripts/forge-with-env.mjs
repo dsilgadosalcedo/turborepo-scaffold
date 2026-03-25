@@ -89,6 +89,7 @@ if (!allowedForgeCommands.has(forgeCommand)) {
 }
 
 loadEnvFiles();
+process.env.DESKTOP_FORGE_COMMAND = forgeCommand;
 
 runStep(`${process.execPath} ./scripts/prepare-web-bundle.mjs`);
 runStep("electron-vite build");

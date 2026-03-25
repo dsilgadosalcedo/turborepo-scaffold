@@ -1,7 +1,9 @@
 import { getAutoUpdateBaseUrl, getPublisherEnv } from "./scripts/env.mjs";
 
 const autoUpdateBaseUrl = getAutoUpdateBaseUrl();
-const publisherEnv = getPublisherEnv();
+const publisherEnv = getPublisherEnv({
+  requirePublish: process.env.DESKTOP_FORGE_COMMAND === "publish",
+});
 const s3Bucket = publisherEnv.bucket;
 const s3Folder = publisherEnv.folder;
 const s3Region = publisherEnv.region;
@@ -63,26 +65,25 @@ const config = {
       /^\/node_modules($|\/)/,
     ],
   },
-  publishers:
-    s3Bucket && s3Region
-      ? [
-          {
-            name: "@electron-forge/publisher-s3",
-            config: {
-              accessKeyId: s3AccessKeyId,
-              bucket: s3Bucket,
-              endpoint: s3Endpoint,
-              folder: s3Folder,
-              omitAcl: shouldOmitAcl,
-              public: !shouldOmitAcl,
-              region: s3Region,
-              s3ForcePathStyle,
-              secretAccessKey: s3SecretAccessKey,
-              sessionToken: s3SessionToken,
-            },
+  publishers: publisherEnv.shouldPublish
+    ? [
+        {
+          name: "@electron-forge/publisher-s3",
+          config: {
+            accessKeyId: s3AccessKeyId,
+            bucket: s3Bucket,
+            endpoint: s3Endpoint,
+            folder: s3Folder,
+            omitAcl: shouldOmitAcl,
+            public: !shouldOmitAcl,
+            region: s3Region,
+            s3ForcePathStyle,
+            secretAccessKey: s3SecretAccessKey,
+            sessionToken: s3SessionToken,
           },
-        ]
-      : [],
+        },
+      ]
+    : [],
 };
 
 export default config;

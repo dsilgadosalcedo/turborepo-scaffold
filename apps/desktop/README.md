@@ -47,3 +47,6 @@ For Cloudflare R2, use:
 - `AUTO_UPDATE_KEEP_RELEASES=2` (CI cleanup keeps only the latest N versioned artifacts)
 
 plus your R2 access key and secret key.
+
+`AUTO_UPDATE_BASE_URL` is required for packaging. The `AUTO_UPDATE_S3_*` variables are only
+required when you run `bun run publish`.
