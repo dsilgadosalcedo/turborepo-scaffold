@@ -8,6 +8,8 @@
   "scripts": {
     "postinstall": "node scripts/postinstall.mjs",
     "build": "turbo run build --filter=web --filter=marketing --filter=desktop",
+    "build:web": "turbo run build --filter=web --filter=marketing",
+    "build:desktop": "turbo run build --filter=desktop",
     "dev": "turbo run dev --filter=web --filter=desktop",
     "desktop": "turbo run dev --filter=web --filter=desktop",
     "marketing": "turbo run dev --filter=marketing",
@@ -21,7 +23,7 @@
     "test:integration": "turbo run test:integration",
     "test:e2e": "turbo run test:e2e",
     "check": "bun run lint && bun run format:check && bun run check-types && bun run test",
-    "ci": "bun run check && bun run build"
+    "ci": "bun run check && bun run build:web"
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^20.8.8",
