@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { getPublisherDiagnostics } from "./env.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const desktopRoot = path.resolve(scriptDir, "..");
@@ -66,6 +67,7 @@ function loadEnvFiles() {
 }
 
 function runStep(command) {
+  console.log(`[desktop-release] START ${command}`);
   const result = spawnSync(command, {
     cwd: desktopRoot,
     env: process.env,
@@ -74,12 +76,40 @@ function runStep(command) {
   });
 
   if (typeof result.status === "number" && result.status !== 0) {
+    console.error(`[desktop-release] FAIL ${command} (exit=${result.status})`);
     process.exit(result.status);
   }
 
   if (result.error) {
     throw result.error;
   }
+
+  console.log(`[desktop-release] DONE ${command}`);
+}
+
+function logEnvDiagnostics() {
+  const publisherDiagnostics = getPublisherDiagnostics({
+    requirePublish: forgeCommand === "publish",
+  });
+
+  console.log(
+    "[desktop-release] context",
+    JSON.stringify(
+      {
+        autoUpdateBaseUrlPresent: Boolean(process.env.AUTO_UPDATE_BASE_URL?.trim()),
+        bucket: publisherDiagnostics.bucket,
+        command: forgeCommand,
+        endpoint: publisherDiagnostics.endpoint,
+        folder: publisherDiagnostics.folder,
+        forgeArgs,
+        publisherTargets: publisherDiagnostics.publisherTargets,
+        requirePublish: publisherDiagnostics.requirePublish,
+        shouldPublish: publisherDiagnostics.shouldPublish,
+      },
+      null,
+      2,
+    ),
+  );
 }
 
 if (!allowedForgeCommands.has(forgeCommand)) {
@@ -90,7 +120,15 @@ if (!allowedForgeCommands.has(forgeCommand)) {
 
 loadEnvFiles();
 process.env.DESKTOP_FORGE_COMMAND = forgeCommand;
+logEnvDiagnostics();
 
 runStep(`${process.execPath} ./scripts/prepare-web-bundle.mjs`);
 runStep("electron-vite build");
+
+if (forgeCommand === "publish") {
+  console.log(
+    '[desktop-release] START electron-forge publish (if publisher phase is reached, Forge will print "Publishing to the following targets: s3")',
+  );
+}
+
 runStep(`electron-forge ${forgeCommand}${forgeArgs.length > 0 ? ` ${forgeArgs.join(" ")}` : ""}`);

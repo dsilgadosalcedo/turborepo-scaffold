@@ -1,8 +1,12 @@
-import { getAutoUpdateBaseUrl, getPublisherEnv } from "./scripts/env.mjs";
+import { getAutoUpdateBaseUrl, getPublisherDiagnostics, getPublisherEnv } from "./scripts/env.mjs";
 
 const autoUpdateBaseUrl = getAutoUpdateBaseUrl();
+const requirePublish = process.env.DESKTOP_FORGE_COMMAND === "publish";
 const publisherEnv = getPublisherEnv({
-  requirePublish: process.env.DESKTOP_FORGE_COMMAND === "publish",
+  requirePublish,
+});
+const publisherDiagnostics = getPublisherDiagnostics({
+  requirePublish,
 });
 const s3Bucket = publisherEnv.bucket;
 const s3Folder = publisherEnv.folder;
@@ -16,8 +20,51 @@ const shouldOmitAcl =
   process.env.AUTO_UPDATE_S3_OMIT_ACL === "true" ||
   (process.env.AUTO_UPDATE_S3_OMIT_ACL !== "false" && Boolean(s3Endpoint));
 
+console.log(
+  "[desktop-release] forge-config",
+  JSON.stringify(
+    {
+      autoUpdateBaseUrl,
+      bucket: publisherDiagnostics.bucket,
+      command: process.env.DESKTOP_FORGE_COMMAND ?? "unknown",
+      endpoint: publisherDiagnostics.endpoint,
+      folder: publisherDiagnostics.folder,
+      publisherTargets: publisherDiagnostics.publisherTargets,
+      requirePublish: publisherDiagnostics.requirePublish,
+      shouldPublish: publisherDiagnostics.shouldPublish,
+    },
+    null,
+    2,
+  ),
+);
+
 /** @type {import("@electron-forge/shared-types").ForgeConfig} */
 const config = {
+  hooks: {
+    async preMake() {
+      console.log("[desktop-release] START forge make phase");
+    },
+    async postMake(_forgeConfig, makeResults) {
+      console.log("[desktop-release] postMake results");
+
+      for (const result of makeResults) {
+        console.log(
+          "[desktop-release] artifact-batch",
+          JSON.stringify(
+            {
+              arch: result.arch,
+              artifacts: result.artifacts,
+              platform: result.platform,
+            },
+            null,
+            2,
+          ),
+        );
+      }
+
+      return makeResults;
+    },
+  },
   makers: [
     {
       name: "@electron-forge/maker-zip",

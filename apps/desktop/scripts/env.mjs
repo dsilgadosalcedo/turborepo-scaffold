@@ -55,3 +55,18 @@ export function getPublisherEnv(options = {}) {
     shouldPublish: Boolean(bucket && region),
   };
 }
+
+export function getPublisherDiagnostics(options = {}) {
+  const publisherEnv = getPublisherEnv(options);
+
+  return {
+    bucket: publisherEnv.bucket ?? null,
+    endpoint: publisherEnv.endpoint ?? null,
+    folder: publisherEnv.folder ?? "",
+    forcePathStyle: publisherEnv.s3ForcePathStyle,
+    omitAcl: publisherEnv.omitAcl,
+    publisherTargets: publisherEnv.shouldPublish ? ["s3"] : [],
+    requirePublish: Boolean(options.requirePublish),
+    shouldPublish: publisherEnv.shouldPublish,
+  };
+}
