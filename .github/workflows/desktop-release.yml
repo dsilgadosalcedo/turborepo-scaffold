@@ -15,8 +15,13 @@ jobs:
         include:
           - os: macos-14
             label: macOS arm64
+            arch: arm64
+          - os: macos-14
+            label: macOS x64
+            arch: x64
           - os: windows-latest
             label: Windows x64
+            arch: x64
     runs-on: ${{ matrix.os }}
     env:
       AUTO_UPDATE_BASE_URL: ${{ secrets.AUTO_UPDATE_BASE_URL }}
@@ -60,7 +65,7 @@ jobs:
         run: bun --cwd apps/web run build
 
       - name: Publish desktop artifacts
-        run: bun --cwd apps/desktop run publish
+        run: bun --cwd apps/desktop run publish -- --arch=${{ matrix.arch }}
 
   cleanup:
     name: Cleanup old releases

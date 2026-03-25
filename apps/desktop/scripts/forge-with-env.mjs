@@ -7,6 +7,7 @@ const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const desktopRoot = path.resolve(scriptDir, "..");
 const repoRoot = path.resolve(desktopRoot, "..", "..");
 const forgeCommand = process.argv[2];
+const forgeArgs = process.argv.slice(3);
 const allowedForgeCommands = new Set(["make", "package", "publish"]);
 const initialEnvKeys = new Set(Object.keys(process.env));
 
@@ -91,4 +92,4 @@ loadEnvFiles();
 
 runStep(`${process.execPath} ./scripts/prepare-web-bundle.mjs`);
 runStep("electron-vite build");
-runStep(`electron-forge ${forgeCommand}`);
+runStep(`electron-forge ${forgeCommand}${forgeArgs.length > 0 ? ` ${forgeArgs.join(" ")}` : ""}`);

@@ -25,6 +25,13 @@ const config = {
           : {},
     },
     {
+      name: "@electron-forge/maker-dmg",
+      platforms: ["darwin"],
+      config: {
+        name: "desktop",
+      },
+    },
+    {
       name: "@electron-forge/maker-squirrel",
       platforms: ["win32"],
       config: (arch) => ({

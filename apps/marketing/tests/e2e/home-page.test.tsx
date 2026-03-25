@@ -31,12 +31,12 @@ mock.module("next/image", () => ({
 
 const { default: Home } = await import("../../app/page");
 
-describe("docs home page", () => {
-  test("renders the getting-started content and CTA", () => {
+describe("marketing home page", () => {
+  test("renders the scaffold marketing content and CTA", () => {
     const markup = renderToStaticMarkup(<Home />);
 
-    expect(markup).toContain("Get started by editing");
-    expect(markup).toContain("Open alert");
-    expect(markup).toContain("Read our docs");
+    expect(markup).toContain("A real marketing app, a real product app, and a desktop shell.");
+    expect(markup).toContain("Download desktop");
+    expect(markup).toContain("apps/marketing");
   });
 });

@@ -1,0 +1,210 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgb(255 202 150 / 0.7), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgb(102 125 255 / 0.18), transparent 30%),
+    linear-gradient(180deg, #f7f2ea 0%, #f4eee5 48%, #faf8f5 100%);
+  color: #141414;
+  padding: 88px 24px 80px;
+}
+
+.mesh {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(20 20 20 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(20 20 20 / 0.035) 1px, transparent 1px);
+  background-position: center;
+  background-size: 36px 36px;
+  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.9), transparent 92%);
+}
+
+.hero,
+.pillars,
+.split {
+  margin: 0 auto;
+  max-width: 1120px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  margin-bottom: 52px;
+}
+
+.kicker,
+.cardEyebrow,
+.calloutEyebrow {
+  color: #8b5b2b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin: 0 0 14px;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(3.2rem, 7vw, 6.4rem);
+  letter-spacing: -0.08em;
+  line-height: 0.92;
+  margin: 0;
+  max-width: 940px;
+}
+
+.lead {
+  color: rgb(20 20 20 / 0.74);
+  font-size: 1.08rem;
+  line-height: 1.75;
+  margin: 24px 0 0;
+  max-width: 720px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.primaryAction,
+.secondaryAction {
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  min-height: 50px;
+  padding: 0 22px;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.primaryAction {
+  background: #141414;
+  color: #fff;
+}
+
+.secondaryAction {
+  background: rgb(255 255 255 / 0.55);
+  border: 1px solid rgb(20 20 20 / 0.1);
+  color: #141414;
+}
+
+.pillars {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card,
+.callout,
+.stackPanel {
+  backdrop-filter: blur(18px);
+  background: rgb(255 255 255 / 0.62);
+  border: 1px solid rgb(20 20 20 / 0.08);
+  border-radius: 28px;
+  box-shadow: 0 24px 80px rgb(35 28 19 / 0.08);
+}
+
+.card {
+  padding: 24px;
+}
+
+.cardTitle,
+.split h2 {
+  font-size: clamp(1.75rem, 4vw, 2.7rem);
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+  margin: 0 0 12px;
+}
+
+.cardBody,
+.callout p,
+.stackPanel p {
+  color: rgb(20 20 20 / 0.7);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.split {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  margin-top: 18px;
+}
+
+.callout {
+  padding: 30px;
+}
+
+.callout code {
+  background: rgb(20 20 20 / 0.06);
+  border-radius: 10px;
+  padding: 2px 7px;
+}
+
+.stack {
+  display: grid;
+  gap: 14px;
+}
+
+.stackPanel {
+  padding: 22px;
+}
+
+.stackPanel span {
+  color: rgb(20 20 20 / 0.56);
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.stackPanel strong {
+  display: block;
+  font-size: 1.3rem;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primaryAction:hover,
+  .secondaryAction:hover {
+    transform: translateY(-1px);
+  }
+
+  .primaryAction:hover {
+    background: #292929;
+  }
+
+  .secondaryAction:hover {
+    background: rgb(255 255 255 / 0.82);
+    border-color: rgb(20 20 20 / 0.18);
+  }
+}
+
+@media (max-width: 900px) {
+  .pillars,
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 72px 18px 56px;
+  }
+
+  .title {
+    font-size: 3.25rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

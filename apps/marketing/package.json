@@ -1,11 +1,11 @@
 {
-  "name": "docs",
+  "name": "marketing",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "next dev --port 3001",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "oxlint app next.config.js --deny-warnings",
     "format": "oxfmt --write .",

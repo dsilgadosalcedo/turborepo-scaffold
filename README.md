@@ -6,7 +6,7 @@ Reusable Turborepo boilerplate for teams that want one Next.js application to po
 
 - `apps/web`: the main Next.js application
 - `apps/desktop`: the Electron shell that loads the web app in development and runs the standalone Next.js server in production
-- `apps/docs`: a separate Next.js docs app
+- `apps/marketing`: a separate Next.js marketing app for download, pricing, overview, and public pages
 - `packages/ui`: shared shadcn-style UI primitives used across apps
 - `packages/typescript-config`: shared TypeScript configuration
 
@@ -48,7 +48,7 @@ Useful app-specific commands:
 
 ```sh
 bun run web
-bun run docs
+bun run marketing
 bun run desktop
 ```
 
@@ -92,6 +92,6 @@ See `apps/desktop/.env.example` for the full template.
 
 Use the GitHub Actions workflow at `.github/workflows/desktop-release.yml` to build/publish macOS + Windows artifacts without a local Windows machine. Add the matching repository secrets first.
 
-## Current Caveat
+## Packaging Notes
 
-Electron Forge is the right default for a new Electron app, and this repo is already refactored in that direction. The remaining rough edge is Bun compatibility during Forge packaging in this workspace layout. Development, typechecking, and the shared app architecture are in place, but you should still verify your packaging flow in CI before treating this as a fully polished distribution template.
+The desktop app now targets ZIP + DMG on macOS and Squirrel installers on Windows. ZIP artifacts remain important for the macOS auto-update feed, while DMG gives you the more polished first-download experience most users expect.

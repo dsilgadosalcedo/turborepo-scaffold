@@ -7,10 +7,10 @@
   ],
   "scripts": {
     "postinstall": "node scripts/postinstall.mjs",
-    "build": "turbo run build --filter=web --filter=desktop",
+    "build": "turbo run build --filter=web --filter=marketing --filter=desktop",
     "dev": "turbo run dev --filter=web --filter=desktop",
     "desktop": "turbo run dev --filter=web --filter=desktop",
-    "docs": "turbo run dev --filter=docs",
+    "marketing": "turbo run dev --filter=marketing",
     "web": "turbo run dev --filter=web",
     "lint": "oxlint . --deny-warnings",
     "format": "oxfmt --write .",
