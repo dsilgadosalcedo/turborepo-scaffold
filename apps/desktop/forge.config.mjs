@@ -83,11 +83,10 @@ const config = {
     {
       name: "@electron-forge/maker-squirrel",
       platforms: ["win32"],
-      config: (arch) => ({
+      config: (_arch) => ({
         authors: "Next Electron Turborepo",
         description: "Electron shell for the shared Next.js application",
         name: "NextElectronTurborepo",
-        remoteReleases: `${autoUpdateBaseUrl}/win32/${arch}`,
       }),
     },
   ],
