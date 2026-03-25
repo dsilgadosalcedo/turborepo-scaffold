@@ -2,6 +2,8 @@ import { describe, expect, mock, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import React from "react";
 
+process.env.NEXT_PUBLIC_PRODUCT_WEB_URL = "https://turborepo-scaffold-web.vercel.app";
+
 mock.module("../../app/page.module.css", () => ({
   default: new Proxy(
     {},

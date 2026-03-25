@@ -16,7 +16,7 @@ bun run test:e2e
 ## Runtime Environment
 
 - `AUTO_UPDATE_BASE_URL`: base URL used to compose installer download links
-- `NEXT_PUBLIC_PRODUCT_WEB_URL`: optional canonical URL for the product web app
+- `NEXT_PUBLIC_PRODUCT_WEB_URL`: required canonical URL for the product web app
 
 Recommended when deploying separately:
 

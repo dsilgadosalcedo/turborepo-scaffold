@@ -9,6 +9,9 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      MARKETING_ORIGIN: https://turborepo-scaffold.vercel.app
+      NEXT_PUBLIC_PRODUCT_WEB_URL: https://turborepo-scaffold-web.vercel.app
 
     steps:
       - uses: actions/checkout@v4

@@ -1,7 +1,6 @@
 import Link from "next/link";
+import { env } from "../env.js";
 import styles from "./page.module.css";
-
-const productUrl = process.env.NEXT_PUBLIC_PRODUCT_WEB_URL ?? "https://app.example.com";
 
 const pillars = [
   {
@@ -39,7 +38,11 @@ export default function Home() {
           <Link className={styles.primaryAction} href="/download">
             Download desktop
           </Link>
-          <a className={styles.secondaryAction} href={productUrl} rel="noreferrer">
+          <a
+            className={styles.secondaryAction}
+            href={env.NEXT_PUBLIC_PRODUCT_WEB_URL}
+            rel="noreferrer"
+          >
             Open product app
           </a>
         </div>

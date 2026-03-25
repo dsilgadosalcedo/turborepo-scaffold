@@ -1,19 +1,19 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { env } from "./env.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
-const MARKETING_ORIGIN = process.env.MARKETING_ORIGIN ?? "https://turborepo-scaffold.vercel.app";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
   outputFileTracingRoot: path.join(currentDir, "../../"),
-  transpilePackages: ["@repo/ui"],
+  transpilePackages: ["@repo/ui", "@t3-oss/env-nextjs", "@t3-oss/env-core"],
   async rewrites() {
     return [
       {
         source: "/download",
-        destination: `${MARKETING_ORIGIN}/download`,
+        destination: `${env.MARKETING_ORIGIN}/download`,
       },
     ];
   },
