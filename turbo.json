@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
-  "globalEnv": ["MARKETING_ORIGIN", "NEXT_PUBLIC_PRODUCT_WEB_URL"],
+  "globalEnv": ["AUTO_UPDATE_BASE_URL", "MARKETING_ORIGIN", "NEXT_PUBLIC_PRODUCT_WEB_URL"],
   "ui": "tui",
   "tasks": {
     "build": {

@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { env } from "../../env.js";
 import styles from "./page.module.css";
 
 type DownloadOption = {
@@ -25,9 +26,7 @@ function trimTrailingSlash(value: string) {
 }
 
 function getDownloadOptions(): DownloadOption[] {
-  const baseUrl = trimTrailingSlash(
-    process.env.AUTO_UPDATE_BASE_URL ?? "https://downloads.example.com/myapp",
-  );
+  const baseUrl = trimTrailingSlash(env.AUTO_UPDATE_BASE_URL);
   const version = getDesktopVersion();
 
   return [
@@ -121,7 +120,7 @@ export default function DownloadPage() {
         </Link>
         <a
           className={styles.inlineLink}
-          href={`${trimTrailingSlash(process.env.AUTO_UPDATE_BASE_URL ?? "https://downloads.example.com/myapp")}/darwin/arm64/desktop-darwin-arm64-${desktopVersion}.zip`}
+          href={`${trimTrailingSlash(env.AUTO_UPDATE_BASE_URL)}/darwin/arm64/desktop-darwin-arm64-${desktopVersion}.zip`}
         >
           Direct macOS ZIP
         </a>

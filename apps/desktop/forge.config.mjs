@@ -1,12 +1,15 @@
-const autoUpdateBaseUrl = process.env.AUTO_UPDATE_BASE_URL;
-const s3Bucket = process.env.AUTO_UPDATE_S3_BUCKET;
-const s3Folder = process.env.AUTO_UPDATE_S3_FOLDER;
-const s3Region = process.env.AUTO_UPDATE_S3_REGION;
-const s3AccessKeyId = process.env.AUTO_UPDATE_S3_ACCESS_KEY_ID;
-const s3SecretAccessKey = process.env.AUTO_UPDATE_S3_SECRET_ACCESS_KEY;
-const s3SessionToken = process.env.AUTO_UPDATE_S3_SESSION_TOKEN;
-const s3Endpoint = process.env.AUTO_UPDATE_S3_ENDPOINT;
-const s3ForcePathStyle = process.env.AUTO_UPDATE_S3_FORCE_PATH_STYLE === "true";
+import { getAutoUpdateBaseUrl, getPublisherEnv } from "./scripts/env.mjs";
+
+const autoUpdateBaseUrl = getAutoUpdateBaseUrl();
+const publisherEnv = getPublisherEnv();
+const s3Bucket = publisherEnv.bucket;
+const s3Folder = publisherEnv.folder;
+const s3Region = publisherEnv.region;
+const s3AccessKeyId = publisherEnv.accessKeyId;
+const s3SecretAccessKey = publisherEnv.secretAccessKey;
+const s3SessionToken = publisherEnv.sessionToken;
+const s3Endpoint = publisherEnv.endpoint;
+const s3ForcePathStyle = publisherEnv.s3ForcePathStyle;
 const shouldOmitAcl =
   process.env.AUTO_UPDATE_S3_OMIT_ACL === "true" ||
   (process.env.AUTO_UPDATE_S3_OMIT_ACL !== "false" && Boolean(s3Endpoint));
@@ -17,12 +20,9 @@ const config = {
     {
       name: "@electron-forge/maker-zip",
       platforms: ["darwin"],
-      config: (arch) =>
-        autoUpdateBaseUrl
-          ? {
-              macUpdateManifestBaseUrl: `${autoUpdateBaseUrl}/darwin/${arch}`,
-            }
-          : {},
+      config: (arch) => ({
+        macUpdateManifestBaseUrl: `${autoUpdateBaseUrl}/darwin/${arch}`,
+      }),
     },
     {
       name: "@electron-forge/maker-dmg",
@@ -38,7 +38,7 @@ const config = {
         authors: "Next Electron Turborepo",
         description: "Electron shell for the shared Next.js application",
         name: "NextElectronTurborepo",
-        remoteReleases: autoUpdateBaseUrl ? `${autoUpdateBaseUrl}/win32/${arch}` : undefined,
+        remoteReleases: `${autoUpdateBaseUrl}/win32/${arch}`,
       }),
     },
   ],

@@ -102,5 +102,6 @@ If you deploy `apps/web` and `apps/marketing` as separate Vercel projects, `apps
 
 - Set `MARKETING_ORIGIN` on the web project to the deployed marketing origin.
 - Set `NEXT_PUBLIC_PRODUCT_WEB_URL` on the marketing project to the deployed product origin.
+- Set `AUTO_UPDATE_BASE_URL` anywhere the marketing download page or desktop packaging runs.
 - The default `/download` rewrite now forwards from the product app to the marketing app.
-- These cross-app routing variables are validated at build time and should fail fast when missing.
+- These public routing and download variables are validated at build time and should fail fast when missing.

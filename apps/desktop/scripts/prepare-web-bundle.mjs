@@ -1,6 +1,7 @@
 import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getAutoUpdateBaseUrl } from "./env.mjs";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const desktopRoot = path.resolve(currentDir, "..");
@@ -24,7 +25,7 @@ writeFileSync(
   runtimeConfigPath,
   JSON.stringify(
     {
-      autoUpdateBaseUrl: process.env.AUTO_UPDATE_BASE_URL ?? null,
+      autoUpdateBaseUrl: getAutoUpdateBaseUrl(),
     },
     null,
     2,
