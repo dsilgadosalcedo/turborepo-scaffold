@@ -101,10 +101,10 @@ jobs:
           done
 
       - name: Build web app
-        run: bun --cwd apps/web run build
+        run: bun run --cwd apps/web build
 
       - name: Publish desktop artifacts
-        run: bun --cwd apps/desktop run publish -- --arch=${{ matrix.arch }}
+        run: bun run --cwd apps/desktop publish -- --arch=${{ matrix.arch }}
 
   cleanup:
     name: Cleanup old releases
