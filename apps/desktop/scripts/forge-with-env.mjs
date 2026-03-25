@@ -66,17 +66,39 @@ function loadEnvFiles() {
   }
 }
 
-function runStep(command) {
-  console.log(`[desktop-release] START ${command}`);
-  const result = spawnSync(command, {
+function formatCommandForLog(command, args) {
+  const renderedArgs = args.map((arg) =>
+    /\s/u.test(arg) ? JSON.stringify(arg) : arg,
+  );
+
+  return [command, ...renderedArgs].join(" ");
+}
+
+function getPlatformCommand(command) {
+  if (process.platform !== "win32") {
+    return command;
+  }
+
+  if (command === "npm" || command === "electron-vite" || command === "electron-forge") {
+    return `${command}.cmd`;
+  }
+
+  return command;
+}
+
+function runStep(command, args = []) {
+  const platformCommand = getPlatformCommand(command);
+  const renderedCommand = formatCommandForLog(platformCommand, args);
+  console.log(`[desktop-release] START ${renderedCommand}`);
+  const result = spawnSync(platformCommand, args, {
     cwd: desktopRoot,
     env: process.env,
-    shell: true,
+    shell: false,
     stdio: "inherit",
   });
 
   if (typeof result.status === "number" && result.status !== 0) {
-    console.error(`[desktop-release] FAIL ${command} (exit=${result.status})`);
+    console.error(`[desktop-release] FAIL ${renderedCommand} (exit=${result.status})`);
     process.exit(result.status);
   }
 
@@ -84,7 +106,7 @@ function runStep(command) {
     throw result.error;
   }
 
-  console.log(`[desktop-release] DONE ${command}`);
+  console.log(`[desktop-release] DONE ${renderedCommand}`);
 }
 
 function logEnvDiagnostics() {
@@ -121,7 +143,7 @@ function ensureMacDmgNativeModules() {
     return;
   }
 
-  runStep("npm rebuild macos-alias fs-xattr");
+  runStep("npm", ["rebuild", "macos-alias", "fs-xattr"]);
 }
 
 if (!allowedForgeCommands.has(forgeCommand)) {
@@ -134,8 +156,8 @@ loadEnvFiles();
 process.env.DESKTOP_FORGE_COMMAND = forgeCommand;
 logEnvDiagnostics();
 
-runStep(`${process.execPath} ./scripts/prepare-web-bundle.mjs`);
-runStep("electron-vite build");
+runStep(process.execPath, ["./scripts/prepare-web-bundle.mjs"]);
+runStep("electron-vite", ["build"]);
 ensureMacDmgNativeModules();
 
 if (forgeCommand === "publish") {
@@ -144,4 +166,4 @@ if (forgeCommand === "publish") {
   );
 }
 
-runStep(`electron-forge ${forgeCommand}${forgeArgs.length > 0 ? ` ${forgeArgs.join(" ")}` : ""}`);
+runStep("electron-forge", [forgeCommand, ...forgeArgs]);
