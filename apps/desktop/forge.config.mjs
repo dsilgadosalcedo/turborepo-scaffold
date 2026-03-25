@@ -18,7 +18,6 @@ const s3SessionToken = publisherEnv.sessionToken;
 const s3Endpoint = publisherEnv.endpoint;
 const s3ForcePathStyle = publisherEnv.s3ForcePathStyle;
 const desktopIconPath = path.resolve("assets", "desktop.icns");
-const dmgBackgroundPath = path.resolve("assets", "dmg-background.png");
 const appleSigningIdentity = process.env.APPLE_SIGNING_IDENTITY?.trim();
 const appleId = process.env.APPLE_ID?.trim();
 const appleAppSpecificPassword = process.env.APPLE_APP_SPECIFIC_PASSWORD?.trim();
@@ -89,24 +88,23 @@ const config = {
     {
       name: "@electron-forge/maker-dmg",
       platforms: ["darwin"],
-      config: (arch) => ({
-        background: dmgBackgroundPath,
-        contents: [
+      config: (_arch) => ({
+        contents: (opts) => [
+          {
+            path: opts.appPath,
+            type: "file",
+            x: 184,
+            y: 272,
+          },
           {
             path: "/Applications",
             type: "link",
-            x: 505,
-            y: 318,
-          },
-          {
-            path: path.resolve("out", `desktop-darwin-${arch}`, "desktop.app"),
-            type: "position",
-            x: 180,
-            y: 318,
+            x: 474,
+            y: 272,
           },
         ],
         icon: desktopIconPath,
-        iconSize: 104,
+        iconSize: 96,
         name: "desktop",
         overwrite: true,
         window: {
