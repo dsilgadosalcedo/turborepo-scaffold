@@ -9,7 +9,9 @@
     "start": "next start --port 3000",
     "lint": "oxlint app next.config.js --deny-warnings",
     "format": "oxfmt --write .",
-    "check-types": "next typegen && tsc --noEmit"
+    "check-types": "next typegen && tsc --noEmit",
+    "test": "bun run test:e2e",
+    "test:e2e": "bun run ../../scripts/run-isolated-tests.mjs tests/e2e"
   },
   "dependencies": {
     "@repo/ui": "*",

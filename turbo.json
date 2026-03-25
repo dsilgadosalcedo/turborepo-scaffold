@@ -20,6 +20,45 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "test": {
+      "dependsOn": ["^test"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**",
+        "app/**",
+        "tests/**",
+        "bunfig.toml",
+        "tsconfig*.json"
+      ],
+      "outputs": []
+    },
+    "test:unit": {
+      "dependsOn": ["^test:unit"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**",
+        "lib/**",
+        "tests/**",
+        "bunfig.toml",
+        "tsconfig*.json"
+      ],
+      "outputs": []
+    },
+    "test:integration": {
+      "inputs": ["$TURBO_DEFAULT$", "src/**", "tests/**", "bunfig.toml", "tsconfig*.json"],
+      "outputs": []
+    },
+    "test:e2e": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "app/**",
+        "src/**",
+        "tests/**",
+        "bunfig.toml",
+        "tsconfig*.json"
+      ],
+      "outputs": []
+    },
     "dev": {
       "cache": false,
       "persistent": true

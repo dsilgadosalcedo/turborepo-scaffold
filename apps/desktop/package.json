@@ -14,7 +14,10 @@
     "build": "bun run make",
     "lint": "oxlint src scripts electron.vite.config.ts --deny-warnings",
     "format": "oxfmt --write .",
-    "check-types": "tsc --noEmit -p tsconfig.node.json"
+    "check-types": "tsc --noEmit -p tsconfig.node.json",
+    "test": "bun run test:unit && bun run test:integration",
+    "test:unit": "bun test --preload ../../tests/setup.browser.ts src/main src/shared --pass-with-no-tests",
+    "test:integration": "bun run ../../scripts/run-isolated-tests.mjs tests/integration"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1"

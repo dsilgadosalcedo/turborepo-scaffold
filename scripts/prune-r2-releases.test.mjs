@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "bun:test";
 
 import {
   buildReleaseIndex,
@@ -16,41 +15,35 @@ test("compareSemverDesc sorts stable releases ahead of prereleases", () => {
     .sort(compareSemverDesc)
     .map((version) => version.raw);
 
-  assert.deepEqual(sorted, [
-    "1.2.4",
-    "1.2.3",
-    "1.2.3-beta.10",
-    "1.2.3-beta.2",
-    "1.2.3-beta.1",
-  ]);
+  expect(sorted).toEqual(["1.2.4", "1.2.3", "1.2.3-beta.10", "1.2.3-beta.2", "1.2.3-beta.1"]);
 });
 
 test("buildReleaseIndex groups Windows prerelease packages with canonical semver", () => {
-  const { releases } = buildReleaseIndex([
-    "downloads/win32/x64/NextElectronTurborepo-1.2.3-beta.1 Setup.exe",
-    "downloads/win32/x64/NextElectronTurborepo-1.2.3-beta1-full.nupkg",
-    "downloads/darwin/arm64/desktop-darwin-arm64-1.2.3-beta.1.zip",
-  ], "downloads/");
-
-  assert.deepEqual(Array.from(releases.keys()), ["1.2.3-beta.1"]);
-  assert.deepEqual(
-    Array.from(releases.get("1.2.3-beta.1").windowsPackageBaseNames),
-    ["NextElectronTurborepo-1.2.3-beta1-full.nupkg"],
+  const { releases } = buildReleaseIndex(
+    [
+      "downloads/win32/x64/NextElectronTurborepo-1.2.3-beta.1 Setup.exe",
+      "downloads/win32/x64/NextElectronTurborepo-1.2.3-beta1-full.nupkg",
+      "downloads/darwin/arm64/desktop-darwin-arm64-1.2.3-beta.1.zip",
+    ],
+    "downloads/",
   );
+
+  expect(Array.from(releases.keys())).toEqual(["1.2.3-beta.1"]);
+  expect(Array.from(releases.get("1.2.3-beta.1").windowsPackageBaseNames)).toEqual([
+    "NextElectronTurborepo-1.2.3-beta1-full.nupkg",
+  ]);
 });
 
 test("buildReleaseIndex fails fast on ambiguous alias collisions", () => {
-  assert.throws(
-    () =>
-      buildReleaseIndex(
-        [
-          "downloads/win32/x64/NextElectronTurborepo-1.2.3-beta1 Setup.exe",
-          "downloads/darwin/arm64/desktop-darwin-arm64-1.2.3-beta.1.zip",
-        ],
-        "downloads/",
-      ),
-    /Ambiguous release alias/u,
-  );
+  expect(() =>
+    buildReleaseIndex(
+      [
+        "downloads/win32/x64/NextElectronTurborepo-1.2.3-beta1 Setup.exe",
+        "downloads/darwin/arm64/desktop-darwin-arm64-1.2.3-beta.1.zip",
+      ],
+      "downloads/",
+    ),
+  ).toThrow(/Ambiguous release alias/u);
 });
 
 test("filterDarwinManifest keeps only retained versions and resets currentRelease", () => {
@@ -64,15 +57,12 @@ test("filterDarwinManifest keeps only retained versions and resets currentReleas
   };
   const result = filterDarwinManifest(JSON.stringify(manifest), new Set(["1.1.0", "1.2.0-beta.1"]));
 
-  assert.equal(result.delete, false);
+  expect(result.delete).toBe(false);
 
   const parsed = JSON.parse(result.body);
 
-  assert.equal(parsed.currentRelease, "1.2.0-beta.1");
-  assert.deepEqual(
-    parsed.releases.map((release) => release.version),
-    ["1.1.0", "1.2.0-beta.1"],
-  );
+  expect(parsed.currentRelease).toBe("1.2.0-beta.1");
+  expect(parsed.releases.map((release) => release.version)).toEqual(["1.1.0", "1.2.0-beta.1"]);
 });
 
 test("filterWindowsManifest keeps only retained package lines", () => {
@@ -86,14 +76,11 @@ test("filterWindowsManifest keeps only retained package lines", () => {
     new Set(["desktop-1.1.0-full.nupkg", "desktop-1.2.0-beta1-full.nupkg"]),
   );
 
-  assert.equal(result.delete, false);
-  assert.equal(
-    result.body,
-    [
-      "hash-b desktop-1.1.0-full.nupkg 456",
-      "hash-c desktop-1.2.0-beta1-full.nupkg 789",
-      "",
-    ].join("\n"),
+  expect(result.delete).toBe(false);
+  expect(result.body).toBe(
+    ["hash-b desktop-1.1.0-full.nupkg 456", "hash-c desktop-1.2.0-beta1-full.nupkg 789", ""].join(
+      "\n",
+    ),
   );
 });
 
@@ -103,5 +90,5 @@ test("filterWindowsManifest deletes manifest when no retained packages remain", 
     new Set(["desktop-1.1.0-full.nupkg"]),
   );
 
-  assert.deepEqual(result, { delete: true });
+  expect(result).toEqual({ delete: true });
 });

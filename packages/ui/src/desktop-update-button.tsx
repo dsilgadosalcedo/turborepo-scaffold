@@ -31,7 +31,7 @@ function getDesktopApi(): DesktopApi | undefined {
   return (window as Window & { desktop?: DesktopApi }).desktop;
 }
 
-function getLabel(state: UpdateState) {
+export function getLabel(state: UpdateState) {
   switch (state.status) {
     case "checking":
       return "Buscando actualizacion";

@@ -13,7 +13,9 @@
     "lint": "oxlint src --deny-warnings",
     "format": "oxfmt --write .",
     "generate:component": "turbo gen react-component",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "bun run test:unit",
+    "test:unit": "bun test --preload ../../tests/setup.browser.ts src --pass-with-no-tests"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

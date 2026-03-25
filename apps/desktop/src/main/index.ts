@@ -1,9 +1,9 @@
 import { app, autoUpdater, BrowserWindow, ipcMain } from "electron";
 import { EventEmitter } from "node:events";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import type { DesktopRuntimeInfo, UpdateState } from "../shared/desktop.js";
+import { findServerEntry, getUpdateFeedUrl, supportsAutoUpdates } from "./runtime.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const devServerUrl = "http://127.0.0.1:3000";
@@ -57,34 +57,6 @@ async function waitForUrl(url: string) {
   }
 
   throw new Error(`The development server at ${url} did not become ready.`);
-}
-
-function findServerEntry(rootDir: string): string | null {
-  const stack = [rootDir];
-
-  while (stack.length > 0) {
-    const current = stack.pop();
-
-    if (!current) {
-      continue;
-    }
-
-    for (const entry of readdirSync(current)) {
-      const fullPath = path.join(current, entry);
-      const stats = statSync(fullPath);
-
-      if (stats.isDirectory()) {
-        stack.push(fullPath);
-        continue;
-      }
-
-      if (entry === "server.js") {
-        return fullPath;
-      }
-    }
-  }
-
-  return null;
 }
 
 async function ensureStandaloneServer() {
@@ -143,41 +115,24 @@ async function createWindow() {
   await mainWindow.loadURL(appUrl);
 }
 
-function getAutoUpdateBaseUrl() {
-  if (!app.isPackaged || !existsSync(runtimeConfigPath)) {
-    return null;
-  }
-
-  try {
-    const rawConfig = readFileSync(runtimeConfigPath, "utf8");
-    const parsed = JSON.parse(rawConfig) as { autoUpdateBaseUrl?: string | null };
-
-    return parsed.autoUpdateBaseUrl ?? null;
-  } catch {
-    return null;
-  }
-}
-
-function supportsAutoUpdates() {
-  return process.platform === "darwin" || process.platform === "win32";
-}
-
-function getUpdateFeedUrl() {
-  const baseUrl = getAutoUpdateBaseUrl();
-
-  if (!baseUrl || !supportsAutoUpdates()) {
-    return null;
-  }
-
-  return `${baseUrl}/${process.platform}/${process.arch}`;
-}
-
 function canCheckForUpdates() {
-  return Boolean(app.isPackaged && getUpdateFeedUrl());
+  return Boolean(
+    getUpdateFeedUrl({
+      arch: process.arch,
+      isPackaged: app.isPackaged,
+      platform: process.platform,
+      runtimeConfigPath,
+    }),
+  );
 }
 
 function checkForUpdates() {
-  const feedUrl = getUpdateFeedUrl();
+  const feedUrl = getUpdateFeedUrl({
+    arch: process.arch,
+    isPackaged: app.isPackaged,
+    platform: process.platform,
+    runtimeConfigPath,
+  });
 
   if (!feedUrl) {
     return;

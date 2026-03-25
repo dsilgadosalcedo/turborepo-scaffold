@@ -294,7 +294,8 @@ export function filterDarwinManifest(content, keptVersions) {
     return { delete: true };
   }
 
-  const currentRelease = uniqueSortedVersions(nextReleases.map((release) => release.version))[0] ?? "";
+  const currentRelease =
+    uniqueSortedVersions(nextReleases.map((release) => release.version))[0] ?? "";
 
   return {
     body: JSON.stringify(
@@ -485,7 +486,14 @@ async function planManifestActions(client, bucket, sharedManifestKeys, keptRelea
   return actions;
 }
 
-function createS3Client({ accessKeyId, endpoint, forcePathStyle, region, secretAccessKey, sessionToken }) {
+function createS3Client({
+  accessKeyId,
+  endpoint,
+  forcePathStyle,
+  region,
+  secretAccessKey,
+  sessionToken,
+}) {
   return new S3Client({
     credentials: {
       accessKeyId,
@@ -545,10 +553,16 @@ export async function runCleanup({
     prefix,
   );
   const keysToDelete = deletedReleases.flatMap((release) => Array.from(release.keys));
-  const manifestKeysToDelete = manifestActions.filter((action) => action.delete).map(({ key }) => key);
+  const manifestKeysToDelete = manifestActions
+    .filter((action) => action.delete)
+    .map(({ key }) => key);
   const manifestWrites = manifestActions.filter((action) => !action.delete);
 
-  if (keysToDelete.length === 0 && manifestWrites.length === 0 && manifestKeysToDelete.length === 0) {
+  if (
+    keysToDelete.length === 0 &&
+    manifestWrites.length === 0 &&
+    manifestKeysToDelete.length === 0
+  ) {
     console.log(
       `No cleanup needed. Found ${releaseEntries.length} versioned releases, keep=${keepReleases}.`,
     );

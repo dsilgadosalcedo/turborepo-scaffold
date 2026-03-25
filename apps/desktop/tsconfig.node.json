@@ -4,7 +4,7 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noEmit": true,
-    "types": ["node", "electron", "electron-vite/node"]
+    "types": ["node", "bun-types", "electron", "electron-vite/node"]
   },
   "include": [
     "electron.vite.config.ts",
