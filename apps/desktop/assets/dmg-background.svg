@@ -1,0 +1,40 @@
+<svg width="658" height="498" viewBox="0 0 658 498" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="panel" x1="30" y1="18" x2="624" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7ED"/>
+      <stop offset="0.4" stop-color="#EFF6FF"/>
+      <stop offset="1" stop-color="#DBEAFE"/>
+    </linearGradient>
+    <linearGradient id="orbit" x1="188" y1="85" x2="471" y2="384" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <radialGradient id="flare" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(192 60) rotate(49.292) scale(336.924 285.735)">
+      <stop stop-color="#FDBA74"/>
+      <stop offset="1" stop-color="#FDBA74" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="658" height="498" rx="28" fill="url(#panel)"/>
+  <circle cx="173" cy="78" r="240" fill="url(#flare)"/>
+  <circle cx="520" cy="441" r="219" fill="#BFDBFE" fill-opacity="0.72"/>
+  <rect x="24" y="24" width="610" height="450" rx="24" stroke="#94A3B8" stroke-opacity="0.22" stroke-width="2"/>
+  <g opacity="0.98">
+    <circle cx="204" cy="259" r="92" stroke="url(#orbit)" stroke-width="12"/>
+    <circle cx="204" cy="259" r="42" stroke="#0F172A" stroke-width="10"/>
+    <path d="M204 152V366" stroke="#0F172A" stroke-width="10" stroke-linecap="round"/>
+    <path d="M111 206L297 312" stroke="#0F172A" stroke-width="10" stroke-linecap="round"/>
+    <path d="M297 206L111 312" stroke="#0F172A" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="204" cy="152" r="14" fill="#0F172A"/>
+    <circle cx="297" cy="206" r="14" fill="#0F172A"/>
+    <circle cx="297" cy="312" r="14" fill="#0F172A"/>
+    <circle cx="204" cy="366" r="14" fill="#0F172A"/>
+    <circle cx="111" cy="312" r="14" fill="#0F172A"/>
+    <circle cx="111" cy="206" r="14" fill="#0F172A"/>
+  </g>
+  <path d="M331 248H425" stroke="#111827" stroke-width="20" stroke-linecap="round"/>
+  <path d="M406 220L448 248L406 276" stroke="#111827" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="330" y="132" fill="#0F172A" font-family="Helvetica, Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="-0.03em">Install desktop</text>
+  <text x="330" y="176" fill="#334155" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="500">Drag the app into Applications to finish setup.</text>
+  <text x="101" y="396" fill="#0F172A" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700">desktop.app</text>
+  <text x="469" y="396" fill="#0F172A" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Applications</text>
+</svg>

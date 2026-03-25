@@ -50,3 +50,17 @@ plus your R2 access key and secret key.
 
 `AUTO_UPDATE_BASE_URL` is required for packaging. The `AUTO_UPDATE_S3_*` variables are only
 required when you run `bun run publish`.
+
+## macOS release hardening
+
+If you want macOS users to open the downloaded app without Gatekeeper warning that it is damaged,
+ship signed and notarized builds. The release workflow supports:
+
+- `APPLE_SIGNING_IDENTITY`
+- `APPLE_ID`
+- `APPLE_APP_SPECIFIC_PASSWORD`
+- `APPLE_TEAM_ID`
+- `APPLE_CERTIFICATE_P12_BASE64`
+- `APPLE_CERTIFICATE_PASSWORD`
+
+Those values should live in GitHub Actions secrets for CI release builds, not in the repo.
