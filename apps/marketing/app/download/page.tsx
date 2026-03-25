@@ -33,7 +33,7 @@ function getDownloadOptions(): DownloadOption[] {
     {
       description: "Recommended for Apple Silicon Macs.",
       format: ".dmg",
-      href: `${baseUrl}/darwin/arm64/desktop-${version}-arm64.dmg`,
+      href: `${baseUrl}/darwin/arm64/desktop.dmg`,
       note: "Includes the polished drag-to-Applications install flow.",
       platform: "macOS",
       title: "Apple Silicon (arm64)",
@@ -41,7 +41,7 @@ function getDownloadOptions(): DownloadOption[] {
     {
       description: "For Intel-based Macs.",
       format: ".dmg",
-      href: `${baseUrl}/darwin/x64/desktop-${version}-x64.dmg`,
+      href: `${baseUrl}/darwin/x64/desktop.dmg`,
       note: "Separate Intel build so older Macs get the right native package.",
       platform: "macOS",
       title: "Intel (x64)",
@@ -49,7 +49,7 @@ function getDownloadOptions(): DownloadOption[] {
     {
       description: "Installer with background update support.",
       format: ".exe",
-      href: `${baseUrl}/win32/x64/NextElectronTurborepo-${version} Setup.exe`,
+      href: `${baseUrl}/win32/x64/desktop-${version} Setup.exe`,
       note: "Built for current Windows desktop releases.",
       platform: "Windows",
       title: "Windows 10, 11",

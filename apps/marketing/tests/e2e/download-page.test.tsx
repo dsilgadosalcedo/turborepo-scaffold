@@ -21,14 +21,10 @@ describe("marketing download page", () => {
     const markup = renderToStaticMarkup(<DownloadPage />);
 
     expect(markup).toContain(`Current desktop version: v${desktopVersion}`);
+    expect(markup).toContain("https://downloads.example.com/scaffold/darwin/arm64/desktop.dmg");
+    expect(markup).toContain("https://downloads.example.com/scaffold/darwin/x64/desktop.dmg");
     expect(markup).toContain(
-      `https://downloads.example.com/scaffold/darwin/arm64/desktop-${desktopVersion}-arm64.dmg`,
-    );
-    expect(markup).toContain(
-      `https://downloads.example.com/scaffold/darwin/x64/desktop-${desktopVersion}-x64.dmg`,
-    );
-    expect(markup).toContain(
-      `https://downloads.example.com/scaffold/win32/x64/NextElectronTurborepo-${desktopVersion} Setup.exe`,
+      `https://downloads.example.com/scaffold/win32/x64/desktop-${desktopVersion} Setup.exe`,
     );
   });
 });
