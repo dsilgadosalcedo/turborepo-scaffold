@@ -1,28 +1,15 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-export function findServerEntry(rootDir: string): string | null {
-  const stack = [rootDir];
+export function getStandaloneServerEntry(rootDir: string): string | null {
+  const candidates = [
+    path.join(rootDir, "apps", "web", "server.js"),
+    path.join(rootDir, "server.js"),
+  ];
 
-  while (stack.length > 0) {
-    const current = stack.pop();
-
-    if (!current) {
-      continue;
-    }
-
-    for (const entry of readdirSync(current)) {
-      const fullPath = path.join(current, entry);
-      const stats = statSync(fullPath);
-
-      if (stats.isDirectory()) {
-        stack.push(fullPath);
-        continue;
-      }
-
-      if (entry === "server.js") {
-        return fullPath;
-      }
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) {
+      return candidate;
     }
   }
 

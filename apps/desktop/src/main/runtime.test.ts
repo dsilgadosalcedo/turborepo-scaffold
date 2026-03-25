@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import {
-  findServerEntry,
+  getStandaloneServerEntry,
   getUpdateFeedUrl,
   readAutoUpdateBaseUrl,
   supportsAutoUpdates,
@@ -19,14 +19,22 @@ afterEach(() => {
 });
 
 describe("runtime helpers", () => {
-  test("findServerEntry locates a nested standalone server", () => {
+  test("getStandaloneServerEntry prefers the packaged app server path", () => {
     tempDir = mkdtempSync(path.join(os.tmpdir(), "desktop-runtime-"));
 
-    const standaloneDir = path.join(tempDir, "web", ".next", "standalone");
+    const standaloneDir = path.join(tempDir, "apps", "web");
     mkdirSync(standaloneDir, { recursive: true });
     writeFileSync(path.join(standaloneDir, "server.js"), "console.log('server');");
 
-    expect(findServerEntry(tempDir)).toBe(path.join(standaloneDir, "server.js"));
+    expect(getStandaloneServerEntry(tempDir)).toBe(path.join(standaloneDir, "server.js"));
+  });
+
+  test("getStandaloneServerEntry falls back to a root server.js", () => {
+    tempDir = mkdtempSync(path.join(os.tmpdir(), "desktop-runtime-"));
+
+    writeFileSync(path.join(tempDir, "server.js"), "console.log('server');");
+
+    expect(getStandaloneServerEntry(tempDir)).toBe(path.join(tempDir, "server.js"));
   });
 
   test("readAutoUpdateBaseUrl reads the configured base URL", () => {

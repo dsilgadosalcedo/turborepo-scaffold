@@ -1,9 +1,9 @@
-import { app, autoUpdater, BrowserWindow, ipcMain } from "electron";
+import { app, autoUpdater, BrowserWindow, dialog, ipcMain } from "electron";
 import { EventEmitter } from "node:events";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import type { DesktopRuntimeInfo, UpdateState } from "../shared/desktop.js";
-import { findServerEntry, getUpdateFeedUrl, supportsAutoUpdates } from "./runtime.js";
+import { getStandaloneServerEntry, getUpdateFeedUrl, supportsAutoUpdates } from "./runtime.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const devServerUrl = "http://127.0.0.1:3000";
@@ -65,10 +65,10 @@ async function ensureStandaloneServer() {
   }
 
   const bundledWebRoot = path.join(process.resourcesPath, "web");
-  const serverEntry = findServerEntry(bundledWebRoot);
+  const serverEntry = getStandaloneServerEntry(bundledWebRoot);
 
   if (!serverEntry) {
-    throw new Error(`Could not find a standalone Next.js server inside ${bundledWebRoot}.`);
+    throw new Error(`Could not find the packaged Next.js server entry inside ${bundledWebRoot}.`);
   }
 
   process.env.HOSTNAME = "127.0.0.1";
@@ -110,9 +110,37 @@ async function createWindow() {
   mainWindow.once("ready-to-show", () => {
     mainWindow?.show();
   });
+  mainWindow.webContents.on(
+    "did-fail-load",
+    (_event, errorCode, errorDescription, validatedUrl) => {
+      console.error("Desktop failed to load URL", {
+        errorCode,
+        errorDescription,
+        validatedUrl,
+      });
+    },
+  );
 
   const appUrl = await getAppUrl();
   await mainWindow.loadURL(appUrl);
+}
+
+function formatError(error: unknown) {
+  if (error instanceof Error) {
+    return error.stack ?? error.message;
+  }
+
+  return String(error);
+}
+
+function handleStartupError(error: unknown) {
+  const message = formatError(error);
+
+  console.error("Desktop startup failed", message);
+
+  if (app.isReady()) {
+    dialog.showErrorBox("Desktop startup failed", message);
+  }
 }
 
 function canCheckForUpdates() {
@@ -199,32 +227,38 @@ function setupAutoUpdates() {
   setInterval(checkForUpdates, 4 * 60 * 60 * 1000);
 }
 
-app.whenReady().then(async () => {
-  app.setAppUserModelId("com.squirrel.NextElectronTurborepo.NextElectronTurborepo");
+app
+  .whenReady()
+  .then(async () => {
+    app.setAppUserModelId("com.squirrel.NextElectronTurborepo.NextElectronTurborepo");
 
-  ipcMain.handle("desktop:get-runtime-info", () => getRuntimeInfo());
-  ipcMain.handle("desktop:get-update-state", () => updateState);
-  ipcMain.handle("desktop:check-for-updates", () => {
-    triggerUpdateCheck();
-  });
-  ipcMain.handle("desktop:install-update", () => {
-    if (updateState.status === "downloaded") {
-      autoUpdater.quitAndInstall();
+    ipcMain.handle("desktop:get-runtime-info", () => getRuntimeInfo());
+    ipcMain.handle("desktop:get-update-state", () => updateState);
+    ipcMain.handle("desktop:check-for-updates", () => {
+      triggerUpdateCheck();
+    });
+    ipcMain.handle("desktop:install-update", () => {
+      if (updateState.status === "downloaded") {
+        autoUpdater.quitAndInstall();
+      }
+    });
+
+    if (canCheckForUpdates()) {
+      setupAutoUpdates();
     }
+
+    await createWindow();
+
+    app.on("activate", async () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        await createWindow();
+      }
+    });
+  })
+  .catch((error) => {
+    handleStartupError(error);
+    app.quit();
   });
-
-  if (canCheckForUpdates()) {
-    setupAutoUpdates();
-  }
-
-  await createWindow();
-
-  app.on("activate", async () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      await createWindow();
-    }
-  });
-});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
