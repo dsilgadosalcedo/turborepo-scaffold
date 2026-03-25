@@ -58,7 +58,8 @@ export default function Home() {
                 <CardDescription>
                   Updates download automatically in the background on desktop. When a release is
                   ready and the app is still open, this header shows an <strong>Actualizar</strong>{" "}
-                  button so the user can restart and apply it immediately.
+                  button so the user can restart and apply it immediately. If nothing is pending,
+                  the same spot offers a manual update check.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -94,8 +95,8 @@ export default function Home() {
                 Electron.
               </div>
               <div className="rounded-2xl border bg-muted/35 px-4 py-3">
-                Updates: Electron auto-updates check on startup, download in the background, and can
-                install on quit or via the header button.
+                Updates: Electron auto-updates check on startup, poll in the background, and can be
+                checked manually from the header button.
               </div>
             </CardContent>
           </Card>

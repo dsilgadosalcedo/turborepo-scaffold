@@ -17,6 +17,7 @@ type UpdateState = {
 };
 
 type DesktopApi = {
+  checkForUpdates: () => Promise<void>;
   getUpdateState: () => Promise<UpdateState>;
   installUpdate: () => Promise<void>;
   onUpdateState: (callback: (state: UpdateState) => void) => () => void;
@@ -77,8 +78,22 @@ export function DesktopUpdateButton() {
     };
   }, [api]);
 
-  if (!api || state.status === "idle" || state.status === "not-available") {
+  if (!api) {
     return null;
+  }
+
+  if (state.status === "idle" || state.status === "not-available") {
+    return (
+      <Button
+        onClick={() => {
+          void api.checkForUpdates();
+        }}
+        size="sm"
+        variant="secondary"
+      >
+        Buscar actualizaciones
+      </Button>
+    );
   }
 
   return (

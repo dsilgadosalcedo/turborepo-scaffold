@@ -192,6 +192,14 @@ function checkForUpdates() {
   }
 }
 
+function triggerUpdateCheck() {
+  if (!canCheckForUpdates()) {
+    return;
+  }
+
+  checkForUpdates();
+}
+
 function setupAutoUpdates() {
   updaterEvents.on("checking-for-update", () => {
     setUpdateState({ status: "checking" });
@@ -241,6 +249,9 @@ app.whenReady().then(async () => {
 
   ipcMain.handle("desktop:get-runtime-info", () => getRuntimeInfo());
   ipcMain.handle("desktop:get-update-state", () => updateState);
+  ipcMain.handle("desktop:check-for-updates", () => {
+    triggerUpdateCheck();
+  });
   ipcMain.handle("desktop:install-update", () => {
     if (updateState.status === "downloaded") {
       autoUpdater.quitAndInstall();
