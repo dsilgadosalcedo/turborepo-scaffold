@@ -74,6 +74,8 @@ jobs:
       AUTO_UPDATE_S3_REGION: ${{ secrets.AUTO_UPDATE_S3_REGION }}
       AUTO_UPDATE_S3_SECRET_ACCESS_KEY: ${{ secrets.AUTO_UPDATE_S3_SECRET_ACCESS_KEY }}
       AUTO_UPDATE_S3_SESSION_TOKEN: ${{ secrets.AUTO_UPDATE_S3_SESSION_TOKEN }}
+      MARKETING_ORIGIN: https://turborepo-scaffold.vercel.app
+      NEXT_PUBLIC_PRODUCT_WEB_URL: https://turborepo-scaffold-web.vercel.app
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,7 +94,7 @@ jobs:
           echo "[desktop-release] matrix.os=${{ matrix.os }}"
           echo "[desktop-release] matrix.arch=${{ matrix.arch }}"
           echo "[desktop-release] DESKTOP_FORGE_COMMAND=publish"
-          for key in AUTO_UPDATE_BASE_URL AUTO_UPDATE_S3_BUCKET AUTO_UPDATE_S3_REGION AUTO_UPDATE_S3_ENDPOINT AUTO_UPDATE_S3_ACCESS_KEY_ID AUTO_UPDATE_S3_SECRET_ACCESS_KEY AUTO_UPDATE_S3_FOLDER AUTO_UPDATE_S3_FORCE_PATH_STYLE AUTO_UPDATE_S3_OMIT_ACL AUTO_UPDATE_KEEP_RELEASES; do
+          for key in AUTO_UPDATE_BASE_URL AUTO_UPDATE_S3_BUCKET AUTO_UPDATE_S3_REGION AUTO_UPDATE_S3_ENDPOINT AUTO_UPDATE_S3_ACCESS_KEY_ID AUTO_UPDATE_S3_SECRET_ACCESS_KEY AUTO_UPDATE_S3_FOLDER AUTO_UPDATE_S3_FORCE_PATH_STYLE AUTO_UPDATE_S3_OMIT_ACL AUTO_UPDATE_KEEP_RELEASES MARKETING_ORIGIN NEXT_PUBLIC_PRODUCT_WEB_URL; do
             if [ -n "${!key}" ]; then
               echo "[desktop-release] $key=present"
             else
