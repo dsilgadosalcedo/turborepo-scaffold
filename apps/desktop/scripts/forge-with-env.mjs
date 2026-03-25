@@ -112,6 +112,18 @@ function logEnvDiagnostics() {
   );
 }
 
+function ensureMacDmgNativeModules() {
+  if (process.platform !== "darwin") {
+    return;
+  }
+
+  if (forgeCommand !== "make" && forgeCommand !== "publish") {
+    return;
+  }
+
+  runStep("npm rebuild macos-alias fs-xattr");
+}
+
 if (!allowedForgeCommands.has(forgeCommand)) {
   throw new Error(
     `Invalid forge command "${forgeCommand}". Use one of: ${Array.from(allowedForgeCommands).join(", ")}.`,
@@ -124,6 +136,7 @@ logEnvDiagnostics();
 
 runStep(`${process.execPath} ./scripts/prepare-web-bundle.mjs`);
 runStep("electron-vite build");
+ensureMacDmgNativeModules();
 
 if (forgeCommand === "publish") {
   console.log(
