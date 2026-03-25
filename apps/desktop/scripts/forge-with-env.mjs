@@ -6,6 +6,7 @@ import { getPublisherDiagnostics } from "./env.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const desktopRoot = path.resolve(scriptDir, "..");
+const desktopBinRoot = path.join(desktopRoot, "node_modules", ".bin");
 const repoRoot = path.resolve(desktopRoot, "..", "..");
 const forgeCommand = process.argv[2];
 const forgeArgs = process.argv.slice(3);
@@ -75,11 +76,22 @@ function formatCommandForLog(command, args) {
 }
 
 function getPlatformCommand(command) {
+  if (command === "electron-vite" || command === "electron-forge") {
+    const localBinary = path.join(
+      desktopBinRoot,
+      `${command}${process.platform === "win32" ? ".cmd" : ""}`,
+    );
+
+    if (existsSync(localBinary)) {
+      return localBinary;
+    }
+  }
+
   if (process.platform !== "win32") {
     return command;
   }
 
-  if (command === "npm" || command === "electron-vite" || command === "electron-forge") {
+  if (command === "npm") {
     return `${command}.cmd`;
   }
 
@@ -89,11 +101,13 @@ function getPlatformCommand(command) {
 function runStep(command, args = []) {
   const platformCommand = getPlatformCommand(command);
   const renderedCommand = formatCommandForLog(platformCommand, args);
+  const useShell =
+    process.platform === "win32" && platformCommand.toLowerCase().endsWith(".cmd");
   console.log(`[desktop-release] START ${renderedCommand}`);
   const result = spawnSync(platformCommand, args, {
     cwd: desktopRoot,
     env: process.env,
-    shell: false,
+    shell: useShell,
     stdio: "inherit",
   });
 
