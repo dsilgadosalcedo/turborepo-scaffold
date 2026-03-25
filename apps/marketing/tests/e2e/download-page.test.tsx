@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { mock } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
+
+const desktopPackagePath = path.resolve(process.cwd(), "..", "desktop", "package.json");
+const desktopVersion = JSON.parse(readFileSync(desktopPackagePath, "utf8")).version as string;
 
 mock.module("../../env.js", () => ({
   env: {
@@ -15,15 +20,15 @@ describe("marketing download page", () => {
   test("renders release download links from the desktop version", () => {
     const markup = renderToStaticMarkup(<DownloadPage />);
 
-    expect(markup).toContain("Current desktop version: v0.1.0");
+    expect(markup).toContain(`Current desktop version: v${desktopVersion}`);
     expect(markup).toContain(
-      "https://downloads.example.com/scaffold/darwin/arm64/desktop-0.1.0-arm64.dmg",
+      `https://downloads.example.com/scaffold/darwin/arm64/desktop-${desktopVersion}-arm64.dmg`,
     );
     expect(markup).toContain(
-      "https://downloads.example.com/scaffold/darwin/x64/desktop-0.1.0-x64.dmg",
+      `https://downloads.example.com/scaffold/darwin/x64/desktop-${desktopVersion}-x64.dmg`,
     );
     expect(markup).toContain(
-      "https://downloads.example.com/scaffold/win32/x64/NextElectronTurborepo-0.1.0 Setup.exe",
+      `https://downloads.example.com/scaffold/win32/x64/NextElectronTurborepo-${desktopVersion} Setup.exe`,
     );
   });
 });
