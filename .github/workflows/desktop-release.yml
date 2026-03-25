@@ -92,7 +92,7 @@ jobs:
   cleanup:
     name: Cleanup old releases
     needs: [preflight, publish]
-    if: needs.preflight.outputs.publish_ready == 'true'
+    if: needs.preflight.outputs.publish_ready == 'true' && needs.publish.result == 'success'
     runs-on: ubuntu-latest
     env:
       AUTO_UPDATE_KEEP_RELEASES: ${{ secrets.AUTO_UPDATE_KEEP_RELEASES }}
