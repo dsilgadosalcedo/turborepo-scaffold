@@ -17,3 +17,7 @@ bun run test:e2e
 
 - `AUTO_UPDATE_BASE_URL`: base URL used to compose installer download links
 - `NEXT_PUBLIC_PRODUCT_WEB_URL`: optional canonical URL for the product web app
+
+Recommended when deploying separately:
+
+- `NEXT_PUBLIC_PRODUCT_WEB_URL=https://turborepo-scaffold-web.vercel.app`

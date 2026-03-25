@@ -95,3 +95,11 @@ Use the GitHub Actions workflow at `.github/workflows/desktop-release.yml` to bu
 ## Packaging Notes
 
 The desktop app now targets ZIP + DMG on macOS and Squirrel installers on Windows. ZIP artifacts remain important for the macOS auto-update feed, while DMG gives you the more polished first-download experience most users expect.
+
+## Public Routing
+
+If you deploy `apps/web` and `apps/marketing` as separate Vercel projects, `apps/web` can still own the public product domain and proxy selected marketing routes to the marketing deployment.
+
+- Set `MARKETING_ORIGIN` on the web project to the deployed marketing origin.
+- Set `NEXT_PUBLIC_PRODUCT_WEB_URL` on the marketing project to the deployed product origin.
+- The default `/download` rewrite now forwards from the product app to the marketing app.
