@@ -128,8 +128,9 @@ const config = {
   packagerConfig: {
     asar: true,
     extraResource: [".bundle/web", ".bundle/runtime-config.json"],
+    executableName: "Desktop",
     icon: desktopIconPath,
-    name: "desktop",
+    name: "Desktop",
     osxNotarize: shouldNotarizeDarwin
       ? {
           appleId,
